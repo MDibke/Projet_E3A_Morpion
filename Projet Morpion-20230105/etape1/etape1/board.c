@@ -43,10 +43,13 @@ bool lignTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordi
   
   for(int column = 0; column < 3; column++)
   {
-    if(column != CoordonateY && (boardSquares[CoordonateX][column]))
-      status = true;
-    else
-      goto endLignTest;   
+    if(column != CoordonateY)
+    {
+      if(boardSquares[CoordonateX][column] == boardSquares[CoordonateX][CoordonateY])
+        status = true;
+      else
+        goto endLignTest; 
+    }   
   }
 
   endLignTest :
@@ -59,10 +62,13 @@ bool columnTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coor
   
   for(int lign = 0; lign < 3; lign++)
   {
-    if(lign != CoordonateY && (boardSquares[lign][CoordonateY]))
-      status = true;
-    else
-      goto endColumnTest;   
+    if(lign != CoordonateY)
+    {
+      if(boardSquares[lign][CoordonateY] == boardSquares[CoordonateX][CoordonateY])
+        status = true;
+      else
+        goto endColumnTest;   
+    }
   }
 
   endColumnTest :
