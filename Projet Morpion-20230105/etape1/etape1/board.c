@@ -17,10 +17,68 @@
  *
  * @return a boolean that tells if the game is finished
  */
+
+bool diagonalTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+{
+  bool status = false, test_status = false;
+
+  if((CoordonateX == 0 || CoordonateX == 2)&&(CoordonateY == 0 || CoordonateY == 2)||(CoordonateX == 1 && CoordonateY == 1))
+  { 
+    for(int ligneColomn = 0; ligneColomn < 3; ligneColomn++)
+    {
+      if((boardSquares[ligneColomn][ligneColomn] == boardSquares[CoordonateX][CoordonateY])||(boardSquares[2-ligneColomn][2-ligneColomn] == boardSquares[CoordonateX][CoordonateY]))
+        status = true;
+      else
+        goto endDiagonalTest;
+    }
+  }
+
+  endDiagonalTest :
+  return status; 
+}
+
+bool lignTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+{
+  bool status = false, test_status = false;
+  
+  for(int column = 0; column < 3; column++)
+  {
+    if(column != CoordonateY && (boardSquares[CoordonateX][column]))
+      status = true;
+    else
+      goto endLignTest;   
+  }
+
+  endLignTest :
+  return status; 
+}
+
+bool columnTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+{
+  bool status = false, test_status = false;
+  
+  for(int lign = 0; lign < 3; lign++)
+  {
+    if(lign != CoordonateY && (boardSquares[lign][CoordonateY]))
+      status = true;
+    else
+      goto endColumnTest;   
+  }
+
+  endColumnTest :
+  return status; 
+}
+
 static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastChangeX, Coordinate lastChangeY, GameResult *gameResult)
 {
-  const char last_play = boardSquares[lastChangeX][lastChangeY];
-  
+  if ((diagonalTest(boardSquares,lastChangeX,lastChangeY) == true)||(lignTest(boardSquares,lastChangeX,lastChangeY))||(columnTest(boardSquares,lastChangeX,lastChangeY)))
+  {
+    gameResult = true;
+    goto end;
+  }  
+
+  end :
+  return *gameResult;
 }
 
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
