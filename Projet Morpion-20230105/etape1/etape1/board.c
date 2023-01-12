@@ -1,6 +1,11 @@
 #include "board.h"
 #include <assert.h>
 
+#define CIRCLETEAM 'CIRCLE'
+#define CROSSTEAM 'CROSS'
+
+char boardGame[3][3];
+
 /**
  * Check if the game has to be ended. Only alignment from the last
  * modified square are checked.
@@ -77,14 +82,17 @@ bool columnTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coor
 
 static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastChangeX, Coordinate lastChangeY, GameResult *gameResult)
 {
+  char returnGameResult = gameResult[0];
+
   if ((diagonalTest(boardSquares,lastChangeX,lastChangeY) == true)||(lignTest(boardSquares,lastChangeX,lastChangeY))||(columnTest(boardSquares,lastChangeX,lastChangeY)))
   {
-    gameResult = true;
-    goto end;
-  }  
+    if(boardSquares[lastChangeX][lastChangeY] == CIRCLETEAM)
+      returnGameResult = gameResult[2];
+    else if(boardSquares[lastChangeX][lastChangeY] == CROSSTEAM)
+      returnGameResult = gameResult[1];
+  }
 
-  end :
-  return *gameResult;
+  return returnGameResult;
 }
 
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
@@ -99,10 +107,13 @@ void Board_free ()
 
 PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
-  // TODO: à compléter
+  if(boardGame[x][y] != CROSSTEAM && boardGame[x][y] != CIRCLETEAM)
+  {
+    
+  }
 }
 
 PieceType Board_getSquareContent (Coordinate x, Coordinate y)
 {
-  // TODO: à compléter
+
 }
