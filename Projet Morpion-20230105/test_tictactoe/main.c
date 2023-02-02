@@ -5,11 +5,11 @@
  * @author jilias
  */
 
-#include "test_CheckEndOfGame.h"
+#include "test_checkEndOfGame.h"
 
 int main (void)
 {
-	test_CheckEndOfGame();
+	test_CheckEndOfGame ();
 
 	return 0;
 }

@@ -1,8 +1,7 @@
 #include "board.h"
 #include <assert.h>
 
-unsigned char boardGame[3][3];
-
+static PieceType (boardGames)[3];
 
 /**
  * Check if the game has to be ended. Only alignment from the last
@@ -197,45 +196,25 @@ static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastC
 
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
 {
-  // TODO: à compléter
+  boardGames = calloc(3, sizeofboard);
+
+    for(unsigned int i = 0; i < 3; i++)
+        for(unsigned int j = 0; j < 3; j++)
+            board[i][j] = NONE;
 }
 
 void Board_free ()
 {
-  // TODO: à compléter
-}
-
-SquareChangeCallback changeSquareBoard(Coordinate x, Coordinate y, PieceType kindOfPiece)
-{
-  boardGame[x][y] = kindOfPiece;
-}
-
-EndOfGameCallback endGameBoard(unsigned char gameValueResult)
-{
-  return gameValueResult;
+ free(boardGames);
 }
 
 PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
-  PutPieceResult returnedValue = SQUARE_IS_NOT_EMPTY;
-  bool end;
-  GameResult gameResultGame = DRAW;
-
-  if(boardGame[x][y] != CROSS && boardGame[x][y] != CIRCLE)
-  {
-    changeSquareBoard(x,y,kindOfPiece);
-    returnedValue = PIECE_IN_PLACE;
-    end = isGameFinished(boardGame,x,y,&gameResultGame);
-    if(end = true)
-    {
-      if((&gameResultGame == CIRCLE_WINS) || (&gameResultGame == CROSS_WINS) || (fullTest(boardGame) == true))
-      {
-        endGameBoard(&gameResultGame);
-      }
-    }
-  }
-
-  return returnedValue;
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      if (boardGames[i][j] == NONE)
+        boardGames [x][y] = kindOfPiece;
+      else
 }
 
 PieceType Board_getSquareContent (Coordinate x, Coordinate y)
