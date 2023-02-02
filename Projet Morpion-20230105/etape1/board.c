@@ -1,13 +1,7 @@
 #include "board.h"
 #include <assert.h>
 
-#define CIRCLETEAM 'CIRCLE'
-#define CROSSTEAM 'CROSS'
-#define CROSSRESULT 'CROSS_WIN'
-#define CIRCLERESULT 'CIRCLE_WIN'
-#define DRAWRESULT 'DRAW'
-
-unsigned char boardGame[3][3], lastGameResult;
+unsigned char boardGame[3][3];
 
 
 /**
@@ -27,18 +21,29 @@ unsigned char boardGame[3][3], lastGameResult;
  * @return a boolean that tells if the game is finished
  */
 
-bool diagonalTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+bool diagonal1Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
 {
   bool status = false;
 
-  if((CoordonateX == 0 || CoordonateX == 2)&&(CoordonateY == 0 || CoordonateY == 2)||(CoordonateX == 1 && CoordonateY == 1))
+  if(((CoordonateX == 0 || CoordonateX == 2)&&(CoordonateY == 0 || CoordonateY == 2))||(CoordonateX == 1 && CoordonateY == 1))
   { 
     for(unsigned int ligneColomn = 0; ligneColomn < 3; ligneColomn++)
     {
-      if((boardSquares[ligneColomn][ligneColomn] == boardSquares[CoordonateX][CoordonateY])||(boardSquares[2-ligneColomn][2-ligneColomn] == boardSquares[CoordonateX][CoordonateY]))
-        status = true;
-      else
-        goto endDiagonalTest;
+      if(boardSquares[ligneColomn][ligneColomn] != NONE)
+      {  
+        if(boardSquares[ligneColomn][ligneColomn] == boardSquares[CoordonateX][CoordonateY])
+          status = true;
+        else
+        {
+          status = false;
+          goto endDiagonalTest;
+        }
+      }
+      else 
+      {
+          status = false;
+          goto endDiagonalTest;
+      }
     }
   }
   goto endDiagonalTest;
@@ -47,44 +52,97 @@ bool diagonalTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Co
   return status; 
 }
 
-bool lignTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+bool diagonal2Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
 {
   bool status = false;
-  
-  for(unsigned int column = 0; column < 3; column++)
-  {
-    if(column != CoordonateY)
-    {
-      if(boardSquares[CoordonateX][column] == boardSquares[CoordonateX][CoordonateY])
-        status = true;
-      else
-        goto endLignTest; 
-    }   
-  }
-  goto endLignTest; 
 
-  endLignTest :
+  if(((CoordonateX == 0 || CoordonateX == 2)&&(CoordonateY == 0 || CoordonateY == 2))||(CoordonateX == 1 && CoordonateY == 1))
+  { 
+    for(unsigned int ligneColomn = 0; ligneColomn < 3; ligneColomn++)
+    {
+      if(boardSquares[2-ligneColomn][ligneColomn] != NONE)
+      {  
+        if(boardSquares[2-ligneColomn][ligneColomn] == boardSquares[CoordonateX][CoordonateY])
+          status = true;
+        else
+        {
+          status = false;
+          goto endDiagonalTest;
+        }
+      }
+      else 
+      {
+        status = false;
+        goto endDiagonalTest;
+      }
+    }
+  }
+  goto endDiagonalTest;
+
+  endDiagonalTest :
   return status; 
 }
 
 bool columnTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
 {
-  bool status = false;
-  
-  for(unsigned int lign = 0; lign < 3; lign++)
-  {
-    if(lign != CoordonateY)
-    {
-      if(boardSquares[lign][CoordonateY] == boardSquares[CoordonateX][CoordonateY])
-        status = true;
-      else
-        goto endColumnTest;   
-    }
-  }
-  goto endColumnTest;   
+	bool status = false;
 
-  endColumnTest :
-  return status; 
+	for(Coordinate column = 0; column < 3; column++)
+	{
+		if(column != CoordonateY)
+		{
+			if(boardSquares[CoordonateX][column] != NONE)
+			{
+				if(boardSquares[CoordonateX][column] == boardSquares[CoordonateX][CoordonateY])
+					status = true;
+				else
+				{
+					status = false;
+					goto endColumnTest;
+				}
+			}
+			else
+			{
+				status = false;
+				goto endColumnTest;
+			}
+		}
+	}
+	goto endColumnTest;
+
+	endColumnTest:
+	return status;
+}
+
+bool lignTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+{
+	bool status = false;
+
+	for(Coordinate lign = 0; lign < 3; lign++)
+	{
+		if(lign != CoordonateX)
+		{
+			if(boardSquares[lign][CoordonateY] != NONE)
+			{
+				if(boardSquares[lign][CoordonateY] == boardSquares[CoordonateX][CoordonateY])
+					status = true;
+				else
+				{
+					status = false;
+					goto endLignTest;
+				}
+			}
+			else
+			{
+				status = false;
+				goto endLignTest;
+			}
+		}
+	}
+	goto endLignTest;
+
+	endLignTest:
+	return status;
 }
 
 bool fullTest(const PieceType boardSquares[3][3])
@@ -98,7 +156,10 @@ bool fullTest(const PieceType boardSquares[3][3])
       if(boardSquares[lign][column] != NONE)
         status = true;
       else
+      {
+        status = false;
         goto endColumnTest;   
+      }
     }
   }
   goto endColumnTest;   
@@ -109,33 +170,31 @@ bool fullTest(const PieceType boardSquares[3][3])
 
 static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastChangeX, Coordinate lastChangeY, GameResult *gameResult)
 {
-  bool returnGameResult = false;
+  bool returnGameResult = false,
+  diagonalValue1 = diagonal1Test(boardSquares,lastChangeX,lastChangeY),
+  diagonalValue2 = diagonal2Test(boardSquares,lastChangeX,lastChangeY),
+  lignValue = lignTest(boardSquares,lastChangeX,lastChangeY),
+  columnValue = columnTest(boardSquares,lastChangeX,lastChangeY), 
+  fullBoardValue = fullTest(boardSquares);
 
-  if(gameResult == NONE)
+  *gameResult = DRAW;
+
+  if ((diagonalValue1 == true)||(diagonalValue2 == true)||(lignValue == true)||(columnValue == true))
   {
-    if ((diagonalTest(boardSquares,lastChangeX,lastChangeY) == true)||(lignTest(boardSquares,lastChangeX,lastChangeY))||(columnTest(boardSquares,lastChangeX,lastChangeY)))
-    {
-      if(boardSquares[lastChangeX][lastChangeY] == CIRCLETEAM)
-      {
-        gameResult = CIRCLERESULT;
-        returnGameResult = true;
-      }
-      else if(boardSquares[lastChangeX][lastChangeY] == CROSSTEAM)
-      {
-        gameResult = CROSSRESULT;
-        returnGameResult = true;
-      }
-    }
-    else if (fullTest(boardSquares) == true)
-    {
-      gameResult = DRAWRESULT;
-      returnGameResult = true;
-    }
+    if(boardSquares[lastChangeX][lastChangeY] == CIRCLE)
+      *gameResult = CIRCLE_WINS;
+    else if(boardSquares[lastChangeX][lastChangeY] == CROSS)
+      *gameResult = CROSS_WINS;
+    returnGameResult = true;
+  }
+  else if (fullBoardValue == true)
+  {
+    returnGameResult = true;
   }
 
   return returnGameResult;
 }
-/*
+
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
 {
   // TODO: à compléter
@@ -158,16 +217,21 @@ EndOfGameCallback endGameBoard(unsigned char gameValueResult)
 
 PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
-  unsigned char returnedValue = "SQUARE_IS_NOT_EMPTY", gameResultGame = NONE;
+  PutPieceResult returnedValue = SQUARE_IS_NOT_EMPTY;
+  bool end;
+  GameResult gameResultGame = DRAW;
 
-  if(boardGame[x][y] != CROSSTEAM && boardGame[x][y] != CIRCLETEAM)
+  if(boardGame[x][y] != CROSS && boardGame[x][y] != CIRCLE)
   {
     changeSquareBoard(x,y,kindOfPiece);
-    returnedValue = "PIECE_IN_PLACE";
-    isGameFinished(boardGame,x,y,gameResultGame);
-    if((gameResultGame == CIRCLERESULT) || (gameResultGame == CROSSRESULT) || (gameResultGame == DRAWRESULT && fullTest(boardGame) == true))
+    returnedValue = PIECE_IN_PLACE;
+    end = isGameFinished(boardGame,x,y,&gameResultGame);
+    if(end = true)
     {
-      endGameBoard(gameResultGame);
+      if((&gameResultGame == CIRCLE_WINS) || (&gameResultGame == CROSS_WINS) || (fullTest(boardGame) == true))
+      {
+        endGameBoard(&gameResultGame);
+      }
     }
   }
 
@@ -176,6 +240,5 @@ PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece
 
 PieceType Board_getSquareContent (Coordinate x, Coordinate y)
 {
-
+  // TODO: à compléter
 }
-*/
