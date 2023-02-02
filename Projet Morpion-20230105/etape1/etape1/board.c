@@ -1,6 +1,6 @@
 #include "board.h"
 #include <assert.h>
-
+static PieceType (boardGames)[3];
 /**
  * Check if the game has to be ended. Only alignment from the last
  * modified square are checked.
@@ -25,17 +25,25 @@ static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastC
 
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
 {
-  // TODO: à compléter
+  boardGames = calloc(3, sizeofboard);
+
+    for(unsigned int i = 0; i < 3; i++)
+        for(unsigned int j = 0; j < 3; j++)
+            board[i][j] = NONE;
 }
 
 void Board_free ()
 {
-  // TODO: à compléter
+ free(boardGames);
 }
 
 PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
-  // TODO: à compléter
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      if (boardGames[i][j] == NONE)
+        boardGames [x][y] = kindOfPiece;
+      else
 }
 
 PieceType Board_getSquareContent (Coordinate x, Coordinate y)
