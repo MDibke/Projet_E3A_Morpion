@@ -21,7 +21,7 @@ void PlayerManager_free (void)
 
 void PlayerManager_oneTurn (void)
 {
-  /* TODO: à compléter */
+  
 }
 
 #endif //  #if defined CONFIG_PLAYER_MANAGER_MOCK

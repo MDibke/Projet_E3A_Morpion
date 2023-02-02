@@ -9,7 +9,7 @@
 #include "board_view.h"
 #include "board.h"
 
-
+bool endGame = false;
 
 void Game_init (void)
 {
@@ -18,10 +18,15 @@ void Game_init (void)
 
 void Game_free (void)
 {
-  // TODO: libérer tous les modules
+  Board_free();
+  PlayerManager_free();
+  BoardView_free();
 }
 
 void Game_loop (void)
 {
-	// TODO: à compléter
+	while (!endGame )
+  {
+    PlayerManager_oneTurn();
+  }
 }
