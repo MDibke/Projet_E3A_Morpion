@@ -57,12 +57,12 @@ static const BoardDataTest DataTest[] =
 {
 {CROSS, NONE, NONE},
 {CROSS, CIRCLE, CIRCLE},
-{CROSS, NONE, NONE}}, 0, 1, true, CROSS_WINS},
+{CROSS, NONE, NONE}}, 1, 0, true, CROSS_WINS},
 {
 {
 {CROSS, NONE, NONE},
 {CIRCLE, CIRCLE, CIRCLE},
-{CROSS, NONE, NONE}}, 2, 1, true, CIRCLE_WINS},
+{CROSS, NONE, NONE}}, 1, 2, true, CIRCLE_WINS},
 {
 {
 {CROSS, NONE, NONE},
@@ -81,7 +81,7 @@ static const BoardDataTest DataTest[] =
 
 };
 
-void testCheckEndOfGame (void)
+void test_CheckEndOfGame (void)
 {
 	int successCount = 0;
 	int failCount = 0;
