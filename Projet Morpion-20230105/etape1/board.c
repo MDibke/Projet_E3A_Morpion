@@ -1,8 +1,9 @@
 #include "board.h"
 #include <assert.h>
 
-static PieceType (boardGames)[3];
-
+static PieceType (*boardGames)[3];
+SquareChangeCallback squareChange;
+EndOfGameCallback endOfGame;
 /**
  * Check if the game has to be ended. Only alignment from the last
  * modified square are checked.
@@ -196,13 +197,13 @@ static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastC
 
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
 {
-  boardGames = calloc(3, sizeofboard);
+  boardGames = calloc(3, sizeof(boardGames));
 
     for(unsigned int i = 0; i < 3; i++)
         for(unsigned int j = 0; j < 3; j++)
-            board[i][j] = NONE;
+            boardGames[i][j] = NONE;
   
-  squarechange = onSquareChange;
+  squareChange = onSquareChange;
   endOfGame = onEndOfGame;
 }
 
@@ -213,10 +214,12 @@ void Board_free ()
 
 PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
-  if boardGames[x][y] == NONE return SQUARE_IS_NOT_EMPTY;
+  if (boardGames[x][y] != NONE ) return SQUARE_IS_NOT_EMPTY;
   boardGames [x][y] = kindOfPiece;
   squarechange (x, y, kindOfPiece);
-  if isGameFinished(boardGames, x, y, &gameResult) onEndOfGame(gameResult);
+  GameResult resultofGame = DRAW;
+  if (isGameFinished(boardGames, x, y, &resultofGame))   
+    onEndOfGame(resultofGame);
   return PIECE_IN_PLACE;
 }
 
