@@ -11,9 +11,22 @@
 
 bool endGame = false;
 
+void squareChangedCallback (Coordinate x, Coordinate y, PieceType piece)
+{
+  BoardView_displaySquare(x, y, piece);
+}
+
+void endOfGameCallback (GameResult winner)
+{
+  BoardView_displayWinner(winner);
+  endGame = true;
+}
+
 void Game_init (void)
 {
-  // TODO: initialiser tous les modules
+  Board_init(squareChangedCallback, endOfGameCallback);
+  BoardView_init();
+  PlayerManager_init();
 }
 
 void Game_free (void)
