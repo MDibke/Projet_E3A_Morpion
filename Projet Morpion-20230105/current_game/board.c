@@ -215,7 +215,7 @@ void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfG
     for(unsigned int i = 0; i < 3; i++)
         for(unsigned int j = 0; j < 3; j++)
             boardGames[i][j] = NONE;
-  
+
   squareChange = onSquareChange;
   endOfGame = onEndOfGame;
 }
@@ -231,12 +231,12 @@ PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece
   if (boardGames[x][y] != NONE ) return SQUARE_IS_NOT_EMPTY;
   //placer la piece et mettre a jour l'interface
   boardGames [x][y] = kindOfPiece;
-  squarechange (x, y, kindOfPiece);
+  squareChange(x, y, kindOfPiece);
   // mise en attente du resultat de la partie
   GameResult resultofGame = DRAW;
   // verifier si la partie est finie
   if (isGameFinished(boardGames, x, y, &resultofGame))   
-    onEndOfGame(resultofGame);
+    endOfGame(resultofGame);
   return PIECE_IN_PLACE;
 }
 

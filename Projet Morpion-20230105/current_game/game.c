@@ -18,13 +18,13 @@ void squareChangedCallback (Coordinate x, Coordinate y, PieceType piece)
 
 void endOfGameCallback (GameResult winner)
 {
-  BoardView_displayWinner(winner);
+  BoardView_displayEndOfGame(winner);
   endGame = true;
 }
 
 void Game_init (void)
 {
-  Board_init(squareChangedCallback, endOfGameCallback);
+  Board_init(NONE, DRAW);
   BoardView_init();
   PlayerManager_init();
 }
