@@ -107,15 +107,15 @@ void BoardView_displayEndOfGame (GameResult result)
 {
   if(result == CIRCLE_WINS) 
   {
-    printf("Le joueur O a gagné !\n");
+    printf("\nLe joueur O a gagné !\n");
   }
   else if(result == CROSS_WINS) 
   {
-    printf("Le joueur X a gagné !\n");
+    printf("\nLe joueur X a gagné !\n");
   }
   else if(result == DRAW) 
   {
-    printf("Match nul !\n");
+    printf("\nMatch nul !\n");
   }
 }
 
@@ -123,17 +123,17 @@ void BoardView_displayPlayersTurn (PieceType thisPlayer)
 {
   if(thisPlayer == CIRCLE) 
   {
-    printf("Au tour du joueur O\n");
+    printf("\nAu tour du joueur O\n");
   }
   else if(thisPlayer == CROSS) 
   {
-    printf("Au tour du joueur X\n");
+    printf("\nAu tour du joueur X\n");
   }
 }
 
 void BoardView_sayCannotPutPiece (void)
 {
-  printf("Vous ne pouvez pas jouer ici !\n");
+  printf("\nVous ne pouvez pas jouer ici !\n");
 }
 
 #endif // defined CONFIG_TEXTUI
