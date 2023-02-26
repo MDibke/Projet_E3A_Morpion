@@ -5,24 +5,22 @@
 
 #if defined CONFIG_TEXTUI
 
-#define BOARD_SIZE 3
-
 PieceType (*boardView)[3];
 
 void BoardView_init (void)
 {
-  // Allocation dynamique en mémoire
-  boardView = calloc(3, sizeof *boardView);
-  // Initialisation du tableau
-  for(unsigned char i = 0; i < 3; i++)
-      for(unsigned char j = 0; j < 3; j++)
-          boardGames[i][j] = NONE;
+    // Allocation dynamique en mémoire
+    boardView = calloc(3, sizeof *boardView);
+    // Initialisation du tableau
+    for(unsigned char i = 0; i < 3; i++)
+        for(unsigned char j = 0; j < 3; j++)
+            boardGames[i][j] = NONE;
 }
 
 void BoardView_free (void)
 {
-  // Libération mémoire
-  free(boardGames);
+    // Libération mémoire
+    free(boardGames);
 }
 
 /**
@@ -33,7 +31,8 @@ void BoardView_free (void)
  * @return un caractère grapique associé à cette pièce
  */
 char BoardView_pieceToChar(PieceType piece) {
-    switch (piece) {
+    switch (piece) 
+    {
         case NONE: return ' ';
         case CROSS: return 'X';
         case CIRCLE: return 'O';
@@ -43,37 +42,39 @@ char BoardView_pieceToChar(PieceType piece) {
 void BoardView_displayAll (void)
 {
 // Afficher une grille complétée par les valeurs de view
-  for(unsigned char i = 0; i < 3; i++) {
-      for(unsigned char j = 0; j < 3; j++) {
-          printf(" %c ", BoardView_pieceToChar(boardView[i][j]));
-          printf(j < 2 ? "|" : "\n");
-      }
-      if(i < 2) printf("---+---+---\n");
-  }
-
-  printf("\n");
+    for(unsigned char i = 0; i < 3; i++) 
+    {
+        for(unsigned char j = 0; j < 3; j++) 
+        {
+            printf(" %c ", BoardView_pieceToChar(boardView[i][j]));
+            printf(j < 2 ? "|" : "\n");
+        }
+        if(i < 2) 
+            printf("---+---+---\n");
+    }
+    printf("\n");
 }
 
 void BoardView_displaySquare (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
     // Attribution d'une pièce dans view
-  boardView[y][x] = kindOfPiece;
-  BoardView_displayAll();
+    boardView[y][x] = kindOfPiece;
+    BoardView_displayAll();
 }
 
 void BoardView_displayEndOfGame (GameResult result)
 {
     switch (result) 
     {
-      case CROSS_WINS:
-          printf("---- Le joueur O a gagné ! ----\n\n");
-          break;
-      case CIRCLE_WINS:
-          printf("---- Le joueur X a gagné ! ----\n\n");
-          break;
-      case DRAW:
-          printf("---- Match nul ! ----\n\n");
-          break;
+        case CROSS_WINS:
+            printf("---- Le joueur O a gagné ! ----\n\n");
+            break;
+        case CIRCLE_WINS:
+            printf("---- Le joueur X a gagné ! ----\n\n");
+            break;
+        case DRAW:
+            printf("---- Match nul ! ----\n\n");
+            break;
   }
 }
 

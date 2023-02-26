@@ -24,7 +24,7 @@ void endOfGameCallback (GameResult winner)
 
 void Game_init (void)
 {
-  Board_init(NONE, DRAW);
+  Board_init(squareChangedCallback, endOfGameCallback);
   BoardView_init();
   PlayerManager_init();
 }

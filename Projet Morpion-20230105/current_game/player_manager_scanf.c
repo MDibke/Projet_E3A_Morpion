@@ -15,37 +15,38 @@
 
 #if defined CONFIG_PLAYER_MANAGER_SCANF
 
+// Joueur en cours
 PieceType player;
 
 void PlayerManager_init (void)
 {
-  player = CIRCLE;
+    // Premier joueur à jouer
+    player = CIRCLE;
 }
 
 void PlayerManager_free (void)
 {
-  player = NONE;
 }
 
 void PlayerManager_oneTurn (void)
 {
-  int x, y, read = 0;
-  bool ok = false;
+    int x, y, read = 0;
+    bool ok = false;
 
-    // Affiche le qui joueur joue
-  BoardView_displayPlayersTurn(player);
+    // Afficher quel joueur joue
+    BoardView_displayPlayersTurn(player);
 
-  do {
-        // Demande les coordonnées au format X,Y
-      printf("Place ta piece en X,Y:\n");
-      read = scanf("%d,%d", &x, &y);
+    do {
+        // Demander les coordonnées selon le format X,Y
+        printf("Placez votre piece en X,Y:\n");
+        read = scanf("%d,%d", &x, &y);
 
-        // Si incorrect ou si la case est déjà prise,
-      if(read != 2 || x < 0 || x > 2 || y < 0 || y > 2 || Board_putPiece(x, y, player) != PIECE_IN_PLACE) {
+        // Si incorrect (format, valeur, ou pièce déja placée à cet endroit),
+        if(read != 2 || x < 0 || x > 2 || y < 0 || y > 2 || Board_putPiece(x, y, player) != PIECE_IN_PLACE) {
             // Vider le buffer et afficher un message d'erreur
-          char c;
-          while ((c = getchar()) != '\n' && c != EOF);
-          printf("\nPlacement  invalide...\n");
+            char c;
+            while ((c = getchar()) != '\n' && c != EOF);
+            printf("\nCoordonnees incorrectes...\n");
         }
         else ok = true;
     }

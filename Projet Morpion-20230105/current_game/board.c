@@ -222,7 +222,7 @@ void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfG
 
 void Board_free ()
 {
- free(boardGames);
+    free(boardGames);
 }
 
 PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece)
