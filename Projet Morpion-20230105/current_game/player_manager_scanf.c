@@ -26,6 +26,7 @@ void PlayerManager_init (void)
 
 void PlayerManager_free (void)
 {
+    player = NONE;
 }
 
 void PlayerManager_oneTurn (void)
@@ -36,17 +37,19 @@ void PlayerManager_oneTurn (void)
     // Afficher quel joueur joue
     BoardView_displayPlayersTurn(player);
 
-    do {
+    do 
+    {
         // Demander les coordonnées selon le format X,Y
         printf("Placez votre piece en X,Y:\n");
         read = scanf("%d,%d", &x, &y);
 
         // Si incorrect (format, valeur, ou pièce déja placée à cet endroit),
-        if(read != 2 || x < 0 || x > 2 || y < 0 || y > 2 || Board_putPiece(x, y, player) != PIECE_IN_PLACE) {
+        if(read != 2 || x < 0 || x > 2 || y < 0 || y > 2 || Board_putPiece(x, y, player) == SQUARE_IS_NOT_EMPTY) 
+        {
             // Vider le buffer et afficher un message d'erreur
             char c;
             while ((c = getchar()) != '\n' && c != EOF);
-            printf("\nCoordonnees incorrectes...\n");
+            BoardView_sayCannotPutPiece();
         }
         else ok = true;
     }

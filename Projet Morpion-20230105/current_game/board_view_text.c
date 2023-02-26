@@ -14,13 +14,13 @@ void BoardView_init (void)
     // Initialisation du tableau
     for(unsigned char i = 0; i < 3; i++)
         for(unsigned char j = 0; j < 3; j++)
-            boardGames[i][j] = NONE;
+            boardView[i][j] = NONE;
 }
 
 void BoardView_free (void)
 {
     // Libération mémoire
-    free(boardGames);
+    free(boardView);
 }
 
 /**
@@ -30,7 +30,8 @@ void BoardView_free (void)
  *
  * @return un caractère grapique associé à cette pièce
  */
-char BoardView_pieceToChar(PieceType piece) {
+char BoardView_pieceToChar(PieceType piece) 
+{
     switch (piece) 
     {
         case NONE: return ' ';
@@ -67,10 +68,10 @@ void BoardView_displayEndOfGame (GameResult result)
     switch (result) 
     {
         case CROSS_WINS:
-            printf("---- Le joueur O a gagné ! ----\n\n");
+            printf("---- Le joueur X a gagné ! ----\n\n");
             break;
         case CIRCLE_WINS:
-            printf("---- Le joueur X a gagné ! ----\n\n");
+            printf("---- Le joueur O a gagné ! ----\n\n");
             break;
         case DRAW:
             printf("---- Match nul ! ----\n\n");

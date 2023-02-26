@@ -1,7 +1,7 @@
 #include "board.h"
 #include <assert.h>
 
-PieceType (*boardGames)[3];
+PieceType boardGames[3][3];
 SquareChangeCallback squareChange;
 EndOfGameCallback endOfGame;
 /**
@@ -22,7 +22,7 @@ EndOfGameCallback endOfGame;
  */
 
 //Test la diagonale partant du haut gauche jusqu'au bas droit du plateau et retounr TRUE si il y a trois même signe sur cette diagonale
-bool diagonal1Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+bool diagonal1Test(Coordinate CoordonateX, Coordinate CoordonateY)
 {
   bool status = false;
 
@@ -31,9 +31,9 @@ bool diagonal1Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, C
   { 
     for(unsigned int ligneColomn = 0; ligneColomn < 3; ligneColomn++)
     {
-      if(boardSquares[ligneColomn][ligneColomn] != NONE)
+      if(Board_getSquareContent(ligneColomn,ligneColomn) != NONE)
       {  
-        if(boardSquares[ligneColomn][ligneColomn] == boardSquares[CoordonateX][CoordonateY])
+        if(Board_getSquareContent(ligneColomn,ligneColomn) == Board_getSquareContent(CoordonateX,CoordonateY))
           status = true;
         else
         {
@@ -55,7 +55,7 @@ bool diagonal1Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, C
 }
 
 //Test la diagonale partant du haut droit jusqu'au bas gauche du plateau et retounr TRUE si il y a trois même signe sur cette diagonale
-bool diagonal2Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+bool diagonal2Test(Coordinate CoordonateX, Coordinate CoordonateY)
 {
   bool status = false;
 
@@ -64,9 +64,9 @@ bool diagonal2Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, C
   { 
     for(unsigned int ligneColomn = 0; ligneColomn < 3; ligneColomn++)
     {
-      if(boardSquares[2-ligneColomn][ligneColomn] != NONE)
+      if(Board_getSquareContent((2-ligneColomn),ligneColomn) != NONE)
       {  
-        if(boardSquares[2-ligneColomn][ligneColomn] == boardSquares[CoordonateX][CoordonateY])
+        if(Board_getSquareContent(2-ligneColomn,ligneColomn) == Board_getSquareContent(CoordonateX,CoordonateY))
           status = true;
         else
         {
@@ -88,7 +88,7 @@ bool diagonal2Test(const PieceType boardSquares[3][3], Coordinate CoordonateX, C
 }
 
 //Test la colonne du dernier point joué du plateau et retounr TRUE si il y a trois même signe sur cette colonne
-bool columnTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+bool columnTest(Coordinate CoordonateX, Coordinate CoordonateY)
 {
 	bool status = false;
 
@@ -96,9 +96,9 @@ bool columnTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coor
 	{
 		if(column != CoordonateY)
 		{
-			if(boardSquares[CoordonateX][column] != NONE)
+			if(Board_getSquareContent(CoordonateX,column) != NONE)
 			{
-				if(boardSquares[CoordonateX][column] == boardSquares[CoordonateX][CoordonateY])
+				if(Board_getSquareContent(CoordonateX,column) == Board_getSquareContent(CoordonateX,CoordonateY))
 					status = true;
 				else
 				{
@@ -120,7 +120,7 @@ bool columnTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coor
 }
 
 //Test la ligne du dernier point joué du plateau et retounr TRUE si il y a trois même signe sur cette ligne
-bool lignTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordinate CoordonateY)
+bool lignTest(Coordinate CoordonateX, Coordinate CoordonateY)
 {
 	bool status = false;
 
@@ -128,9 +128,9 @@ bool lignTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordi
 	{
 		if(lign != CoordonateX)
 		{
-			if(boardSquares[lign][CoordonateY] != NONE)
+			if(Board_getSquareContent(lign,CoordonateY) != NONE)
 			{
-				if(boardSquares[lign][CoordonateY] == boardSquares[CoordonateX][CoordonateY])
+				if(Board_getSquareContent(lign,CoordonateY) == Board_getSquareContent(CoordonateX,CoordonateY))
 					status = true;
 				else
 				{
@@ -152,7 +152,7 @@ bool lignTest(const PieceType boardSquares[3][3], Coordinate CoordonateX, Coordi
 }
 
 //test si le plateau est plein et ne permet ps de rejouer
-bool fullTest(const PieceType boardSquares[3][3])
+bool fullTest()
 {
   bool status = false;
 
@@ -160,7 +160,7 @@ bool fullTest(const PieceType boardSquares[3][3])
   {
     for(unsigned int column = 0; column < 3; column++)
     {
-      if(boardSquares[lign][column] != NONE)
+      if(Board_getSquareContent(lign,column) != NONE)
         status = true;
       else
       {
@@ -175,15 +175,15 @@ bool fullTest(const PieceType boardSquares[3][3])
   return status; 
 }
 
-static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastChangeX, Coordinate lastChangeY, GameResult *gameResult)
+static bool isGameFinished (Coordinate lastChangeX, Coordinate lastChangeY, GameResult *gameResult)
 {
   bool returnGameResult = false,
   //récupère les états des cases pouvant finir une partie par rapport au dernier point joué
-  diagonalValue1 = diagonal1Test(boardSquares,lastChangeX,lastChangeY),
-  diagonalValue2 = diagonal2Test(boardSquares,lastChangeX,lastChangeY),
-  lignValue = lignTest(boardSquares,lastChangeX,lastChangeY),
-  columnValue = columnTest(boardSquares,lastChangeX,lastChangeY), 
-  fullBoardValue = fullTest(boardSquares);
+  diagonalValue1 = diagonal1Test(lastChangeX,lastChangeY),
+  diagonalValue2 = diagonal2Test(lastChangeX,lastChangeY),
+  lignValue = lignTest(lastChangeX,lastChangeY),
+  columnValue = columnTest(lastChangeX,lastChangeY), 
+  fullBoardValue = fullTest();
 
   *gameResult = DRAW;
 
@@ -191,9 +191,9 @@ static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastC
   if ((diagonalValue1 == true)||(diagonalValue2 == true)||(lignValue == true)||(columnValue == true))
   {
     //retourne le gagnant à partir du dernier point joué
-    if(boardSquares[lastChangeX][lastChangeY] == CIRCLE)
+    if(Board_getSquareContent(lastChangeX,lastChangeY) == CIRCLE)
       *gameResult = CIRCLE_WINS;
-    else if(boardSquares[lastChangeX][lastChangeY] == CROSS)
+    else if(Board_getSquareContent(lastChangeX,lastChangeY)== CROSS)
       *gameResult = CROSS_WINS;
 
     //retourne que la partie est fini
@@ -210,11 +210,9 @@ static bool isGameFinished (const PieceType boardSquares[3][3], Coordinate lastC
 
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
 {
-  boardGames = calloc(3, sizeof(boardGames));
-
-    for(unsigned int i = 0; i < 3; i++)
-        for(unsigned int j = 0; j < 3; j++)
-            boardGames[i][j] = NONE;
+  for(unsigned int i = 0; i < 3; i++)
+    for(unsigned int j = 0; j < 3; j++)
+        boardGames[i][j] = NONE;
 
   squareChange = onSquareChange;
   endOfGame = onEndOfGame;
@@ -228,14 +226,15 @@ void Board_free ()
 PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
   //verifier si la case est vide
-  if (boardGames[x][y] != NONE ) return SQUARE_IS_NOT_EMPTY;
+  if (Board_getSquareContent(x,y) != NONE ) 
+    return SQUARE_IS_NOT_EMPTY;
   //placer la piece et mettre a jour l'interface
   boardGames [x][y] = kindOfPiece;
   squareChange(x, y, kindOfPiece);
   // mise en attente du resultat de la partie
   GameResult resultofGame = DRAW;
   // verifier si la partie est finie
-  if (isGameFinished(boardGames, x, y, &resultofGame))   
+  if (isGameFinished(x, y, &resultofGame))   
     endOfGame(resultofGame);
   return PIECE_IN_PLACE;
 }
