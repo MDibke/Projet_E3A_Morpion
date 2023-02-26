@@ -210,16 +210,18 @@ static bool isGameFinished (Coordinate lastChangeX, Coordinate lastChangeY, Game
 
 void Board_init (SquareChangeCallback onSquareChange, EndOfGameCallback onEndOfGame)
 {
+  //initialisation du plateau de jeu
   for(unsigned int i = 0; i < 3; i++)
     for(unsigned int j = 0; j < 3; j++)
         boardGames[i][j] = NONE;
-
+//initialisation des callbacks
   squareChange = onSquareChange;
   endOfGame = onEndOfGame;
 }
 
 void Board_free ()
 {
+  //libération de la mémoire
     free(boardGames);
 }
 
@@ -241,5 +243,6 @@ PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kindOfPiece
 
 PieceType Board_getSquareContent (Coordinate x, Coordinate y)
 {
+  //retourne le contenu de la case
   return boardGames[x][y];
 }
