@@ -68,10 +68,10 @@ void BoardView_displayEndOfGame (GameResult result)
     switch (result) 
     {
         case CROSS_WINS:
-            printf("---- Le joueur X a gagné ! ----\n\n");
+            printf("---- Le joueur X a gagne ! ----\n\n");
             break;
         case CIRCLE_WINS:
-            printf("---- Le joueur O a gagné ! ----\n\n");
+            printf("---- Le joueur O a gagne ! ----\n\n");
             break;
         case DRAW:
             printf("---- Match nul ! ----\n\n");
