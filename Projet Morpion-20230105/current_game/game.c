@@ -38,8 +38,12 @@ void Game_free (void)
 
 void Game_loop (void)
 {
+  char c;
 	while (!endGame )
   {
     PlayerManager_oneTurn();
   }
+ 
+  //attendre un touche pour quitter
+  while (!kbhit());
 }
