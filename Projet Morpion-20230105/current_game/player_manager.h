@@ -10,8 +10,8 @@
 #if !defined PLAYER_MANAGER_H_
 #define PLAYER_MANAGER_H_
 
-#define CONFIG_PLAYER_MANAGER_MOCK
-//#define CONFIG_PLAYER_MANAGER_SCANF
+//#define CONFIG_PLAYER_MANAGER_MOCK
+#define CONFIG_PLAYER_MANAGER_SCANF
 
 /**
  * Constructor of player manager.
