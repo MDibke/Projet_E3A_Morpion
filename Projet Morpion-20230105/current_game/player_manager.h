@@ -10,7 +10,10 @@
 #if !defined PLAYER_MANAGER_H_
 #define PLAYER_MANAGER_H_
 
+//Activation player_manager_mock
 //#define CONFIG_PLAYER_MANAGER_MOCK
+
+//Activation player_manager_scanf
 #define CONFIG_PLAYER_MANAGER_SCANF
 
 /**

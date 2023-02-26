@@ -10,6 +10,7 @@
 #if !defined BOARD_VIEW_H_
 #define BOARD_VIEW_H_
 
+//Activation board_view_text
 #define CONFIG_TEXTUI
 
 #include "board.h"

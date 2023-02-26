@@ -5,12 +5,10 @@
 
 #if defined CONFIG_TEXTUI
 
-PieceType (*boardView)[3];
+PieceType boardView[3][3];
 
 void BoardView_init (void)
 {
-    // Allocation dynamique en mémoire
-    boardView = calloc(3, sizeof *boardView);
     // Initialisation du tableau
     for(unsigned char i = 0; i < 3; i++)
         for(unsigned char j = 0; j < 3; j++)
