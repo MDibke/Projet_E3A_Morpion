@@ -1,4 +1,5 @@
 #include "board_view.h"
+#include <board.h>
 #include <assert.h>
 #include <stdio.h>
 
@@ -6,128 +7,89 @@
 
 #define BOARD_SIZE 3
 
+PieceType (*boardView)[3];
+
 void BoardView_init (void)
 {
-  for(int i = 0; i < BOARD_SIZE; i++)
-  {
-    for(int j = 0; j < BOARD_SIZE; j++) 
-    {
-      printf(" ");
-      if(j<BOARD_SIZE-1) 
-      {
-        printf("|");
-      }
-    }
-    if(i<BOARD_SIZE-1) 
-    {
-      printf("\n-----\n");
-    }
-  }
+  // Allocation dynamique en mémoire
+  boardView = calloc(3, sizeof *boardView);
+  // Initialisation du tableau
+  for(unsigned char i = 0; i < 3; i++)
+      for(unsigned char j = 0; j < 3; j++)
+          boardGames[i][j] = NONE;
 }
 
 void BoardView_free (void)
 {
-  for(int i =0; i < 25; i++)
-  {
-    printf("\n");
-  }
+  // Libération mémoire
+  free(boardGames);
+}
+
+/**
+ * Convertir un type de piece en un caractère
+ *
+ * @param [in] piece Piece
+ *
+ * @return un caractère grapique associé à cette pièce
+ */
+char BoardView_pieceToChar(PieceType piece) {
+    switch (piece) {
+        case NONE: return ' ';
+        case CROSS: return 'X';
+        case CIRCLE: return 'O';
+    }
 }
 
 void BoardView_displayAll (void)
 {
-  // TODO: à compléter
-  for(int i = 0; i < BOARD_SIZE; i++)
-  {
-    for(int j = 0; j < BOARD_SIZE; j++) 
-    {
-      if(Board_getSquareContent(i, j) == CIRCLE) 
-      {
-        printf("O");
+// Afficher une grille complétée par les valeurs de view
+  for(unsigned char i = 0; i < 3; i++) {
+      for(unsigned char j = 0; j < 3; j++) {
+          printf(" %c ", BoardView_pieceToChar(boardView[i][j]));
+          printf(j < 2 ? "|" : "\n");
       }
-      else if(Board_getSquareContent(i, j) == CROSS) 
-      {
-        printf("X");
-      }
-      else 
-      {
-        printf(" ");
-      }
-
-      if(j<BOARD_SIZE-1) 
-      {
-        printf("|");
-      }
-    }    
-    if(i<BOARD_SIZE-1) 
-    {
-      printf("\n-----\n");
-    }
+      if(i < 2) printf("---+---+---\n");
   }
+
+  printf("\n");
 }
 
 void BoardView_displaySquare (Coordinate x, Coordinate y, PieceType kindOfPiece)
 {
-  for(int i = 0; i < BOARD_SIZE; i++)
-  {
-    for(int j = 0; j < BOARD_SIZE; j++) 
-    {
-      if(i == x && j == y) 
-      {
-        if(kindOfPiece == CIRCLE) 
-        {
-          printf("O");
-        }
-        else if(kindOfPiece == CROSS) 
-        {
-          printf("X");
-        }
-        else 
-        {
-          printf(" ");
-        }
-      }
-      else 
-      {
-        printf(" ");
-      }
-      
-      if(j<BOARD_SIZE-1) 
-      {
-        printf("|");
-      }
-    }
-    if(i<BOARD_SIZE-1) 
-    {
-      printf("\n-----\n");
-    }
-  }
+    // Attribution d'une pièce dans view
+  boardView[y][x] = kindOfPiece;
+  BoardView_displayAll();
 }
 
 void BoardView_displayEndOfGame (GameResult result)
 {
-  if(result == CIRCLE_WINS) 
-  {
-    printf("\nLe joueur O a gagné !\n");
-  }
-  else if(result == CROSS_WINS) 
-  {
-    printf("\nLe joueur X a gagné !\n");
-  }
-  else if(result == DRAW) 
-  {
-    printf("\nMatch nul !\n");
+    switch (result) 
+    {
+      case CROSS_WINS:
+          printf("---- Le joueur O a gagné ! ----\n\n");
+          break;
+      case CIRCLE_WINS:
+          printf("---- Le joueur X a gagné ! ----\n\n");
+          break;
+      case DRAW:
+          printf("---- Match nul ! ----\n\n");
+          break;
   }
 }
 
 void BoardView_displayPlayersTurn (PieceType thisPlayer)
 {
-  if(thisPlayer == CIRCLE) 
+  switch (thisPlayer) 
   {
-    printf("\nAu tour du joueur O\n");
-  }
-  else if(thisPlayer == CROSS) 
-  {
-    printf("\nAu tour du joueur X\n");
+    case CROSS:
+        printf("Au tour des croix\n");
+        break;
+    case CIRCLE:
+        printf("Au tour des cercles\n");
+        break;
+    case NONE:
+        fatalError("BoardView_displayPlayersTurn -> PLAYER: NONE");
+        break;
   }
 }
 

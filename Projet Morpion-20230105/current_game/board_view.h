@@ -13,6 +13,7 @@
 #define CONFIG_TEXTUI
 
 #include "board.h"
+#include "tictactoe_errors.h"
 
 /**
  * Constructor of the board view.

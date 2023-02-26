@@ -11,6 +11,8 @@
 #define BOARD_H_
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /**
  * A logic coordinate in the board. This can be
@@ -27,9 +29,9 @@ typedef unsigned int Coordinate;
  */
 typedef enum
 {
-	NONE,   /**< used to tell there is no piece (a piece that has no kind is not a piece) */
-	CROSS,  /**< a cross ("X") piece */
-	CIRCLE  /**< a circle ("O") piece */
+	NONE = 0,   /**< used to tell there is no piece (a piece that has no kind is not a piece) */
+	CROSS = 1,  /**< a cross ("X") piece */
+	CIRCLE = 2  /**< a circle ("O") piece */
 } PieceType;
 
 /**
@@ -46,9 +48,9 @@ typedef enum
  */
 typedef enum
 {
-	DRAW,        /**< draw game, not player wins */
-	CROSS_WINS,  /**< crosses player wins */
-	CIRCLE_WINS  /**< circles player wins */
+    DRAW = 0,        /**< draw game, not player wins */
+    CROSS_WINS = 1,  /**< crosses player wins */
+    CIRCLE_WINS = 2  /**< circles player wins */
 } GameResult;
 
 /**
@@ -113,5 +115,6 @@ extern PutPieceResult Board_putPiece (Coordinate x, Coordinate y, PieceType kind
  */
 extern PieceType Board_getSquareContent (Coordinate x, Coordinate y);
 
+extern PieceType (*boardGames)[3];
 
 #endif /* !defined BOARD_H_ */

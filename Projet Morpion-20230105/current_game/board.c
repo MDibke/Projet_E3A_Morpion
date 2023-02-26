@@ -1,7 +1,7 @@
 #include "board.h"
 #include <assert.h>
 
-static PieceType (*boardGames)[3];
+PieceType (*boardGames)[3];
 SquareChangeCallback squareChange;
 EndOfGameCallback endOfGame;
 /**
